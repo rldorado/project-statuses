@@ -1,4 +1,4 @@
-# project-statuses
+Project Statuses
 
 ## Project setup
 ```
