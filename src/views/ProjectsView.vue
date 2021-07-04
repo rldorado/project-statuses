@@ -1,8 +1,13 @@
 <template>
   <div>
     <h1>Projects view</h1>
-    <div class="container flexy-center">
-      <dropdown v-for="project in projects" :key="project.id" :data="statuses">
+    <div class="container row">
+      <dropdown
+        v-for="project in projects"
+        :key="project.id"
+        :selection="project.status"
+        :data="projectStatuses"
+        @change-selection="changeProjectStatus">
         {{ project.name }}
       </dropdown>
     </div>
@@ -10,27 +15,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import { fetchAllProjects, fetchStatusesFromElements } from "@/api";
-import { Project } from "@/interfaces/Project";
-import Dropdown from "@/helpers/Dropdown.vue";
-import { Status } from "@/interfaces/Status";
+import Dropdown from "@/components/Dropdown.vue";
+import store from "@/store";
 
 export default defineComponent({
   name: "ProjectsView",
   components: { Dropdown },
   setup() {
-    const projects = ref<Project[]>([]);
-    const statuses = ref<Status[]>([]);
+    const projects = computed(() => store.getters.projects);
+    const projectStatuses = computed(() => store.getters.statuses);
+    const changeProjectStatus = (value: string) => {
+      store.dispatch("setProjectStatus", { $status: value });
+    };
 
     onMounted(async () => {
       const resultProjects = await fetchAllProjects();
-      projects.value = resultProjects;
-      const resultStatuses = await fetchStatusesFromElements(["projects"]);
-      statuses.value = resultStatuses;
+      store.dispatch("setProjectsList", resultProjects);
+      const resultProjectStatuses = await fetchStatusesFromElements(["projects"]);
+      store.dispatch("setStatusesList", resultProjectStatuses);
     });
 
-    return { projects, statuses };
+    return { projects, projectStatuses, changeProjectStatus };
   },
 });
 </script>

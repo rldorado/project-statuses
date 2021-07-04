@@ -3,4 +3,5 @@ export interface Status {
   name: string;
   color: string;
   active: boolean;
+  module: string;
 }

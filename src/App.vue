@@ -35,17 +35,23 @@
   align-items: center;
 }
 
-.flex {
+.row {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Responsive layout */
+@media (max-width: 1020px) {
+  .row {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 }
 
 .container {
   max-height: 100vh;
-  max-width: 1024px;
-  margin: 100px auto 400px;
-}
-
-p {
-  font-size: 2rem;
+  margin: 100px auto;
 }
 </style>

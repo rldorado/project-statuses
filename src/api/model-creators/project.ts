@@ -2,16 +2,16 @@ import { Project } from "@/interfaces/Project";
 
 const createProjectFromServer = (data: any): Project => {
   const { project_id, project_name, color, status } = data;
-  if (![project_id, project_name].some((val) => val)) {
+  if (![project_id, project_name, status].some((val) => val)) {
     const errorMessage =
       "Error creating <Project> model. Some mandatory props are missing: ";
-    console.error(errorMessage, project_id, project_name);
+    console.error(errorMessage, project_id, project_name, status);
   }
   const project: Project = {
     id: Number(project_id),
     name: String(project_name),
     color: color ?? "",
-    status: status ?? "pending",
+    status: String(status),
   };
   return project;
 };

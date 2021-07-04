@@ -1,25 +1,42 @@
 <template>
   <div>
     <h1>Tasks view</h1>
-    {{ tasks }}
+    <div class="container row">
+      <dropdown v-for="task in tasks"
+        :key="task.id"
+        :selection="task.status"
+        :data="taskStatuses"
+        @change-selection="changeTaskStatus">
+        {{ task.name }}
+      </dropdown>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
-import { fetchAllTasks } from "@/api";
+import { computed, defineComponent, onMounted } from "vue";
+import Dropdown from "@/components/Dropdown.vue";
+import { fetchAllTasks, fetchStatusesFromElements } from "@/api";
+import store from "@/store";
 
 export default defineComponent({
   name: "TasksView",
+  components: { Dropdown },
   setup() {
-    const tasks = ref([]);
+    const tasks = computed(() => store.getters.tasks);
+    const taskStatuses = computed(() => store.getters.statuses);
+    const changeTaskStatus = (value: string) => {
+      store.dispatch("setTaskStatus", { $status: value });
+    };
 
     onMounted(async () => {
-      const result = await fetchAllTasks();
-      tasks.value = result;
+      const resultTasks = await fetchAllTasks();
+      store.dispatch("setTasksList", resultTasks);
+      const resultProjectStatuses = await fetchStatusesFromElements(["tasks"]);
+      store.dispatch("setStatusesList", resultProjectStatuses);
     });
 
-    return { tasks };
+    return { tasks, taskStatuses, changeTaskStatus };
   },
 });
 </script>
