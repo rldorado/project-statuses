@@ -7,6 +7,8 @@
 </template>
 
 <style lang="scss">
+/** LAYOUTS **/
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -26,5 +28,24 @@
       color: #42b983;
     }
   }
+}
+
+.flexy-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.container {
+  max-height: 100vh;
+  max-width: 1024px;
+  margin: 100px auto 400px;
+}
+
+p {
+  font-size: 2rem;
 }
 </style>
