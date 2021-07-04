@@ -16,10 +16,16 @@ const actions: ActionTree<MainState, MainState> = {
   },
   async setProjectStatus(
     { commit }: any,
-    $payload: { $status: Status; $project: Project }
+    $payload: { $status: string; $project: Project }
   ) {
     commit(types.SET_PROJECT_STATUS, $payload);
   },
+  async setTaskStatus(
+    { commit }: any,
+    $payload: { $status: string; $task: Task }
+  ) {
+    commit(types.SET_TASK_STATUS, $payload);
+  }
 };
 
 export default actions;

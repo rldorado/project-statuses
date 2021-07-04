@@ -16,11 +16,21 @@ const mutations: MutationTree<MainState> = {
   },
   SET_PROJECT_STATUS(
     state: MainState,
-    $payload: { $status: Status; $project: Project }
+    $payload: { $status: string; $project: Project }
   ) {
     state.projects.map((project) => {
       if (project.id === $payload.$project.id) {
-        project.status = $payload.$status.id;
+        project.status = $payload.$status;
+      }
+    });
+  },
+  SET_TASK_STATUS(
+    state: MainState,
+    $payload: { $status: string; $task: Task }
+  ) {
+    state.tasks.map((task) => {
+      if (task.id === $payload.$task.id) {
+        task.status = $payload.$status;
       }
     });
   },

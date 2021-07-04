@@ -29,6 +29,10 @@ export default defineComponent({
   name: "Dropdown",
   components: { DotColor },
   props: {
+    element: {
+      type: Object,
+      required: true,
+    },
     selection: {
       type: String,
       default: null,
@@ -41,7 +45,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const active = ref(false);
     const toggleDropdown = () => (active.value = !active.value);
-    const changeSelection = (id: string) => emit("change-selection", id);
+    const changeSelection = (id: string) => emit("change-selection", { id, element: props.element });
 
     return { active, toggleDropdown, changeSelection };
   },

@@ -5,6 +5,7 @@
       <dropdown
         v-for="project in projects"
         :key="project.id"
+        :element="project"
         :selection="project.status"
         :data="projectStatuses"
         @change-selection="changeProjectStatus">
@@ -19,6 +20,7 @@ import { computed, defineComponent, onMounted } from "vue";
 import { fetchAllProjects, fetchStatusesFromElements } from "@/api";
 import Dropdown from "@/components/Dropdown.vue";
 import store from "@/store";
+import { Project } from "@/interfaces/Project";
 
 export default defineComponent({
   name: "ProjectsView",
@@ -26,8 +28,11 @@ export default defineComponent({
   setup() {
     const projects = computed(() => store.getters.projects);
     const projectStatuses = computed(() => store.getters.statuses);
-    const changeProjectStatus = (value: string) => {
-      store.dispatch("setProjectStatus", { $status: value });
+    const changeProjectStatus = ({ id, element }: any) => {
+      store.dispatch("setProjectStatus", {
+        $status: id as string,
+        $project: element as Project,
+      });
     };
 
     onMounted(async () => {

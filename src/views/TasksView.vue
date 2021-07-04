@@ -4,6 +4,7 @@
     <div class="container row">
       <dropdown v-for="task in tasks"
         :key="task.id"
+        :element="task"
         :selection="task.status"
         :data="taskStatuses"
         @change-selection="changeTaskStatus">
@@ -18,6 +19,7 @@ import { computed, defineComponent, onMounted } from "vue";
 import Dropdown from "@/components/Dropdown.vue";
 import { fetchAllTasks, fetchStatusesFromElements } from "@/api";
 import store from "@/store";
+import { Task } from "@/interfaces/Task";
 
 export default defineComponent({
   name: "TasksView",
@@ -25,8 +27,11 @@ export default defineComponent({
   setup() {
     const tasks = computed(() => store.getters.tasks);
     const taskStatuses = computed(() => store.getters.statuses);
-    const changeTaskStatus = (value: string) => {
-      store.dispatch("setTaskStatus", { $status: value });
+    const changeTaskStatus = ({ id, element }: any) => {
+      store.dispatch("setTaskStatus", {
+        $status: id as string,
+        $task: element as Task,
+      });
     };
 
     onMounted(async () => {
