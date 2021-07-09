@@ -2,11 +2,12 @@
   <div class="dropdown">
     <div
       :class="['dropdown__header', { 'is-active': active }]"
+      v-click-outside="deactivate"
       @click="toggleDropdown">
       <slot />
     </div>
 
-    <div class="dropdown__content">
+    <div class="dropdown__content" v-if="active">
       <ul>
         <li
           v-for="item in data"
@@ -45,9 +46,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const active = ref(false);
     const toggleDropdown = () => (active.value = !active.value);
-    const changeSelection = (id: string) => emit("change-selection", { id, element: props.element });
+    const deactivate = () => active.value = false;
+    const changeSelection = (id: string) => {
+      deactivate();
+      emit("change-selection", { id, element: props.element });
+    };
 
-    return { active, toggleDropdown, changeSelection };
+    return { active, toggleDropdown, changeSelection, deactivate };
   },
 });
 </script>
